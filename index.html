@@ -197,6 +197,107 @@
             }
         }
 
+        /* ---- نوار الفبای فارسی (افقی، بالای کارت‌ها) ---- */
+        .alpha-bar {
+            display: none;
+            position: sticky;
+            top: 0;
+            z-index: 9998;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 2px;
+            padding: 8px 10px;
+            margin: 0 -15px 15px -15px;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(8px);
+            user-select: none;
+            touch-action: none;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .alpha-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .alpha-bar .alpha-letter {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            min-width: 26px;
+            height: 26px;
+            line-height: 26px;
+            text-align: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        background 0.2s ease,
+                        color 0.2s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .alpha-bar .alpha-letter.active {
+            background: var(--primary);
+            color: #fff;
+            transform: scale(1.5);
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(78, 84, 200, 0.45);
+        }
+
+        /* ---- حباب شناور (مثل اندروید) - بالای انگشت ---- */
+        .alpha-bubble {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            box-shadow:
+                0 10px 30px rgba(78, 84, 200, 0.5),
+                0 0 0 6px rgba(143, 148, 251, 0.25),
+                0 0 0 12px rgba(143, 148, 251, 0.12);
+            transform: translate(-50%, -50%) scale(0);
+            transition:
+                transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.2s ease;
+            pointer-events: none;
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        .alpha-bubble.show {
+            display: flex;
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        /* خط اتصال از پایین حباب به سمت انگشت */
+        .alpha-bubble::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            width: 2px;
+            height: 25px;
+            background: linear-gradient(to bottom, rgba(143, 148, 251, 0.6), rgba(143, 148, 251, 0));
+            transform: translateX(-50%);
+            border-radius: 2px;
+            pointer-events: none;
+        }
+
         /* ---- گرید کارت‌ها ---- */
         .grid-container {
             display: grid;
@@ -475,96 +576,6 @@
             }
         }
 
-        /* ---- نوار الفبای فارسی (فقط موبایل) ---- */
-        .alpha-bar {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 4px;
-            transform: translateY(-50%);
-            z-index: 9998;
-            flex-direction: column;
-            align-items: center;
-            gap: 1px;
-            padding: 6px 3px;
-            background: rgba(255, 255, 255, 0.85);
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(8px);
-            user-select: none;
-            touch-action: none;
-        }
-
-        .alpha-bar .alpha-letter {
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: var(--primary);
-            width: 18px;
-            height: 18px;
-            line-height: 18px;
-            text-align: center;
-            border-radius: 50%;
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        background 0.2s ease,
-                        color 0.2s ease;
-            position: relative;
-        }
-
-        .alpha-bar .alpha-letter.active {
-            background: var(--primary);
-            color: #fff;
-            transform: scale(1.7);
-            z-index: 10;
-            box-shadow: 0 4px 12px rgba(78, 84, 200, 0.45);
-        }
-
-        /* ---- حباب شناور (مثل اندروید) ---- */
-        .alpha-bubble {
-            display: none;
-            position: fixed;
-            z-index: 10000;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #fff;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            font-weight: 800;
-            box-shadow:
-                0 10px 30px rgba(78, 84, 200, 0.5),
-                0 0 0 6px rgba(143, 148, 251, 0.25),
-                0 0 0 12px rgba(143, 148, 251, 0.12);
-            transform: translate(-50%, -50%) scale(0);
-            transition:
-                transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
-                opacity 0.2s ease,
-                box-shadow 0.3s ease;
-            pointer-events: none;
-            opacity: 0;
-            will-change: transform, opacity;
-        }
-
-        .alpha-bubble.show {
-            display: flex;
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-
-        .alpha-bubble::before {
-            content: '';
-            position: absolute;
-            right: 100%;
-            top: 50%;
-            width: 30px;
-            height: 2px;
-            background: linear-gradient(to left, rgba(143, 148, 251, 0.6), rgba(143, 148, 251, 0));
-            transform: translateY(-50%);
-            border-radius: 2px;
-            pointer-events: none;
-        }
-
         /* ---- موبایل ---- */
         @media (max-width: 768px) {
             body {
@@ -638,6 +649,14 @@
 
             .alpha-bar {
                 display: flex;
+                margin: 0 -12px 12px -12px;
+            }
+
+            .alpha-bar .alpha-letter {
+                font-size: 0.75rem;
+                min-width: 22px;
+                height: 22px;
+                line-height: 22px;
             }
 
             .alpha-bubble {
@@ -698,6 +717,9 @@
         <div class="main-content">
             <h2>مناطق استان کرمان</h2>
             <p>لطفاً منطقه مورد نظر خود را انتخاب کنید:</p>
+
+            <!-- نوار الفبای فارسی (افقی، بالای گرید) -->
+            <div class="alpha-bar" id="alpha-bar"></div>
 
             <!-- نشانگر فیلتر فعال -->
             <div class="filter-badge" id="filter-badge">
@@ -809,8 +831,6 @@
         <span>نمایش همه شهرها</span>
     </button>
 
-    <div class="alpha-bar" id="alpha-bar"></div>
-
     <div class="alpha-bubble" id="alpha-bubble"></div>
 
     <script>
@@ -864,7 +884,6 @@
         const $ = (sel) => document.querySelector(sel);
         let currentActiveLetter = null;
 
-        // ---- ساخت کارت‌های مناطق ----
         function loadRegions() {
             const grid = $('#regions-grid');
             grid.innerHTML = '';
@@ -985,7 +1004,6 @@
             $('#home-link').onclick = (e) => { e.preventDefault(); goBackToRegions(); };
         }
 
-        // ---- دکمه شناور شاد ----
         function initShadFloat() {
             const btn = $('#shad-float');
             setTimeout(() => btn.classList.add('collapsed'), 3000);
@@ -993,7 +1011,6 @@
             btn.addEventListener('mouseleave', () => btn.classList.add('collapsed'));
         }
 
-        // ---- نوار الفبای فارسی ----
         const PERSIAN_ALPHABET = ['ا','ب','پ','ت','ث','ج','چ','ح','خ','د','ذ','ر','ز','ژ','س','ش','ص','ض','ط','ظ','ع','غ','ف','ق','ک','گ','ل','م','ن','و','ه','ی'];
 
         function getFirstLetter(name) {
@@ -1075,7 +1092,6 @@
             });
         }
 
-        // ---- لغو فیلتر و نمایش همه ----
         function clearFilter() {
             $('#filter-badge').classList.remove('show');
             $('#show-all-float').classList.remove('show');
@@ -1084,7 +1100,6 @@
             document.querySelectorAll('.alpha-letter.active').forEach(l => l.classList.remove('active'));
         }
 
-        // ---- مدیریت لمس/کشیدن روی نوار الفبا (شبیه اندروید) ----
         function initAlphaBar() {
             const bar = $('#alpha-bar');
             const bubble = $('#alpha-bubble');
@@ -1135,8 +1150,9 @@
             function activateLetter(letter, x, y) {
                 if (!letter) return;
 
-                const bubbleOffsetX = 55;
-                const bubbleOffsetY = -10;
+                // حباب بالای انگشت ظاهر می‌شود (نوار افقی)
+                const bubbleOffsetX = 0;
+                const bubbleOffsetY = -70;
 
                 targetX = x + bubbleOffsetX;
                 targetY = y + bubbleOffsetY;
@@ -1190,8 +1206,8 @@
 
                 const letter = getLetterFromPoint(e.clientX, e.clientY);
                 if (letter) {
-                    currentX = e.clientX + 55;
-                    currentY = e.clientY - 10;
+                    currentX = e.clientX;
+                    currentY = e.clientY - 70;
                     bubble.style.left = currentX + 'px';
                     bubble.style.top = currentY + 'px';
                     activateLetter(letter, e.clientX, e.clientY);

@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>پایگاه های انتخاب رشته استان کرمان</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
@@ -17,7 +17,7 @@
             --radius: 12px;
             --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.06);
             --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -25,6 +25,7 @@
             margin: 0;
             padding: 0;
             font-family: Vazirmatn, 'Segoe UI', Tahoma, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -33,6 +34,7 @@
             min-height: 100vh;
             padding: 20px;
             line-height: 1.7;
+            overflow-x: hidden;
         }
 
         .container {
@@ -136,50 +138,85 @@
             margin-top: 20px;
         }
 
+        /* ---- کارت آکاردئونی ---- */
         .card {
             background: #fff;
             border-radius: var(--radius);
             overflow: hidden;
             box-shadow: var(--shadow-sm);
-            cursor: pointer;
             border: 2px solid transparent;
             transition: var(--transition);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .card:active {
+            transform: scale(0.98);
         }
 
         .card:hover {
-            transform: translateY(-6px);
             box-shadow: var(--shadow-md);
             border-color: var(--primary);
         }
 
-        .card-header {
+        .card-title {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: #fff;
-            padding: 15px;
-            text-align: center;
-            font-size: 1.15rem;
+            padding: 16px 18px;
+            font-size: 1.05rem;
             font-weight: 700;
-        }
-
-        .card-body {
-            padding: 20px;
-            text-align: center;
-            min-height: 100px;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
         }
 
-        .card-body p {
-            color: #555;
+        .card-title .title-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
-        .card-footer {
-            background: var(--light);
-            padding: 12px;
-            text-align: center;
-            color: #6c757d;
+        .card-title .region-name {
+            font-size: 1.15rem;
+            font-weight: 800;
+        }
+
+        .card-title .title-sub {
             font-size: 0.85rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .card-title .arrow {
+            font-size: 0.85rem;
+            transition: transform 0.35s ease;
+            opacity: 0.9;
+        }
+
+        .card.open .card-title .arrow {
+            transform: rotate(180deg);
+        }
+
+        /* بدنه آکاردئون */
+        .card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #fafbff;
+        }
+
+        .card.open .card-body {
+            max-height: 120px;
+        }
+
+        .card-body-inner {
+            padding: 16px 18px;
+            color: #6c757d;
+            font-size: 0.95rem;
+            text-align: center;
+            border-top: 1px dashed #e0e3f0;
         }
 
         /* ---- صفحه جزئیات ---- */
@@ -306,7 +343,6 @@
             transition: all 0.5s ease;
         }
 
-        /* حالت جمع‌شده */
         .shad-float.collapsed {
             width: 60px;
             height: 60px;
@@ -326,15 +362,120 @@
             box-shadow: 0 12px 30px rgba(0, 188, 212, 0.55);
         }
 
+        /* ---- نوار الفبای فارسی (فقط موبایل) ---- */
+        .alpha-bar {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 4px;
+            transform: translateY(-50%);
+            z-index: 9998;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+            padding: 6px 3px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(8px);
+            user-select: none;
+            touch-action: none;
+        }
+
+        .alpha-bar .alpha-letter {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--primary);
+            width: 18px;
+            height: 18px;
+            line-height: 18px;
+            text-align: center;
+            border-radius: 50%;
+            transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+            position: relative;
+        }
+
+        .alpha-bar .alpha-letter.active {
+            background: var(--primary);
+            color: #fff;
+            transform: scale(1.6);
+            z-index: 10;
+        }
+
+        /* حباب بزرگ کنار انگشت */
+        .alpha-bubble {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: 800;
+            box-shadow: 0 8px 25px rgba(78, 84, 200, 0.5);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+        }
+
+        .alpha-bubble.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
         /* ---- موبایل ---- */
         @media (max-width: 768px) {
-            .main-content {
-                padding: 20px 15px;
+            body {
+                padding: 10px;
             }
 
+            .main-content {
+                padding: 15px 12px;
+            }
+
+            h1 {
+                font-size: 1.3rem;
+            }
+
+            /* گرید دو ستونی در موبایل */
             .grid-container {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 15px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .card-title {
+                padding: 12px 10px;
+                font-size: 0.85rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .card-title .title-text {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+            }
+
+            .card-title .region-name {
+                font-size: 1rem;
+            }
+
+            .card-title .title-sub {
+                font-size: 0.7rem;
+            }
+
+            .card-title .arrow {
+                align-self: flex-end;
+                font-size: 0.7rem;
+            }
+
+            .card-body-inner {
+                padding: 10px;
+                font-size: 0.75rem;
             }
 
             .link-buttons {
@@ -355,6 +496,18 @@
             .shad-float.collapsed {
                 width: 52px;
                 height: 52px;
+            }
+
+            /* نمایش نوار الفبا */
+            .alpha-bar {
+                display: flex;
+            }
+        }
+
+        /* ---- دسکتاپ: نوار الفبا پنهان، دکمه شاد عادی ---- */
+        @media (min-width: 769px) {
+            .alpha-bar {
+                display: none;
             }
         }
     </style>
@@ -397,21 +550,42 @@
                 <h2>زیرمنطقه های کرمان</h2>
                 <p>لطفاً یکی از زیرمنطقه های کرمان را انتخاب کنید:</p>
 
-                <div class="grid-container">
+                <div class="grid-container" id="sub-regions-grid">
                     <div class="card" data-region="roadno">
-                        <div class="card-header">راه نو</div>
-                        <div class="card-body"><p>پایگاه انتخاب رشته</p></div>
-                        <div class="card-footer">برای اطلاعات بیشتر کلیک کنید</div>
+                        <div class="card-title">
+                            <div class="title-text">
+                                <span class="region-name">راه نو</span>
+                                <span class="title-sub">پایگاه انتخاب رشته</span>
+                            </div>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-body-inner">برای اطلاعات بیشتر کلیک کنید</div>
+                        </div>
                     </div>
                     <div class="card" data-region="area1">
-                        <div class="card-header">ناحیه یک</div>
-                        <div class="card-body"><p>پایگاه انتخاب رشته</p></div>
-                        <div class="card-footer">برای اطلاعات بیشتر کلیک کنید</div>
+                        <div class="card-title">
+                            <div class="title-text">
+                                <span class="region-name">ناحیه یک</span>
+                                <span class="title-sub">پایگاه انتخاب رشته</span>
+                            </div>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-body-inner">برای اطلاعات بیشتر کلیک کنید</div>
+                        </div>
                     </div>
                     <div class="card" data-region="area2">
-                        <div class="card-header">ناحیه دو</div>
-                        <div class="card-body"><p>پایگاه انتخاب رشته</p></div>
-                        <div class="card-footer">برای اطلاعات بیشتر کلیک کنید</div>
+                        <div class="card-title">
+                            <div class="title-text">
+                                <span class="region-name">ناحیه دو</span>
+                                <span class="title-sub">پایگاه انتخاب رشته</span>
+                            </div>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-body-inner">برای اطلاعات بیشتر کلیک کنید</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -460,6 +634,12 @@
         <i class="fas fa-users"></i>
         <span class="shad-text">به گروه بزرگ ما در شاد بپیوندید</span>
     </a>
+
+    <!-- نوار الفبای فارسی (فقط موبایل) -->
+    <div class="alpha-bar" id="alpha-bar"></div>
+
+    <!-- حباب بزرگ حرف -->
+    <div class="alpha-bubble" id="alpha-bubble"></div>
 
     <script>
         // ---- داده‌ها ----
@@ -523,12 +703,24 @@
                 card.className = 'card';
                 card.dataset.region = key;
                 card.innerHTML = `
-                    <div class="card-header">${region.name}</div>
-                    <div class="card-body"><p>پایگاه انتخاب رشته</p></div>
-                    <div class="card-footer">برای اطلاعات بیشتر کلیک کنید</div>
+                    <div class="card-title">
+                        <div class="title-text">
+                            <span class="region-name">${region.name}</span>
+                            <span class="title-sub">پایگاه انتخاب رشته</span>
+                        </div>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-body-inner">برای اطلاعات بیشتر کلیک کنید</div>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
+        }
+
+        // ---- باز/بسته کردن کارت ----
+        function toggleCard(card) {
+            card.classList.toggle('open');
         }
 
         // ---- مدیریت رویدادها ----
@@ -536,8 +728,40 @@
             const card = e.target.closest('.card[data-region]');
             if (card) {
                 const key = card.dataset.region;
-                if (key === 'kerman') showSubRegions();
-                else showCenterDetail(key);
+
+                // اگر کارت باز است و کلیک دوباره روی خودش → فقط ببند
+                if (card.classList.contains('open')) {
+                    toggleCard(card);
+                    return;
+                }
+
+                // بستن بقیه کارت‌ها
+                document.querySelectorAll('.card.open').forEach(c => c.classList.remove('open'));
+
+                // اگر کارت کرمان بود، زیرمنطقه‌ها را نشان بده
+                if (key === 'kerman') {
+                    showSubRegions();
+                } else {
+                    // کارت را باز کن
+                    toggleCard(card);
+                    // بعد از کمی تاخیر، جزئیات را نشان بده (تا انیمیشن دیده شود)
+                    setTimeout(() => showCenterDetail(key), 250);
+                }
+            }
+        });
+
+        // برای زیرمنطقه‌ها هم همین رفتار
+        document.addEventListener('click', (e) => {
+            const card = e.target.closest('#sub-regions-grid .card[data-region]');
+            if (card) {
+                const key = card.dataset.region;
+                if (card.classList.contains('open')) {
+                    toggleCard(card);
+                    return;
+                }
+                document.querySelectorAll('#sub-regions-grid .card.open').forEach(c => c.classList.remove('open'));
+                toggleCard(card);
+                setTimeout(() => showCenterDetail(key), 250);
             }
         });
 
@@ -604,20 +828,181 @@
         // ---- دکمه شناور شاد ----
         function initShadFloat() {
             const btn = $('#shad-float');
+            setTimeout(() => btn.classList.add('collapsed'), 3000);
+            btn.addEventListener('mouseenter', () => btn.classList.remove('collapsed'));
+            btn.addEventListener('mouseleave', () => btn.classList.add('collapsed'));
+        }
 
-            // بعد از ۳ ثانیه جمع شود
-            setTimeout(() => {
-                btn.classList.add('collapsed');
-            }, 3000);
+        // ---- نوار الفبای فارسی ----
+        // حروف الفبای فارسی به ترتیب استاندارد
+        const PERSIAN_ALPHABET = ['ا','ب','پ','ت','ث','ج','چ','ح','خ','د','ذ','ر','ز','ژ','س','ش','ص','ض','ط','ظ','ع','غ','ف','ق','ک','گ','ل','م','ن','و','ه','ی'];
 
-            // با هاور باز شود
-            btn.addEventListener('mouseenter', () => {
-                btn.classList.remove('collapsed');
+        // پیدا کردن حرف اول اسم هر منطقه (با نرمال‌سازی)
+        function getFirstLetter(name) {
+            if (!name) return null;
+            let n = name.trim();
+            // حذف "ال" و پیشوندهای رایج
+            if (n.startsWith('ا') && n.length > 1) {
+                // اگر اسم با "ا" شروع شود، همان "ا" را برمی‌گردانیم
+                return 'ا';
+            }
+            return n[0] || null;
+        }
+
+        // ساخت نقشه حرف → لیست کلیدهای مناطق
+        function buildLetterMap() {
+            const map = {};
+            mainRegions.forEach(key => {
+                const region = regionsData[key];
+                if (!region) return;
+                const letter = getFirstLetter(region.name);
+                if (!letter) return;
+                if (!map[letter]) map[letter] = [];
+                map[letter].push(key);
+            });
+            return map;
+        }
+
+        let letterMap = {};
+
+        // ساخت نوار الفبا (فقط حروف موجود)
+        function buildAlphaBar() {
+            const bar = $('#alpha-bar');
+            bar.innerHTML = '';
+            letterMap = buildLetterMap();
+
+            const availableLetters = PERSIAN_ALPHABET.filter(l => letterMap[l] && letterMap[l].length > 0);
+
+            availableLetters.forEach(letter => {
+                const el = document.createElement('div');
+                el.className = 'alpha-letter';
+                el.dataset.letter = letter;
+                el.textContent = letter;
+                bar.appendChild(el);
+            });
+        }
+
+        // فیلتر کردن کارت‌ها بر اساس حرف
+        function filterByLetter(letter) {
+            const grid = $('#regions-grid');
+            const keys = letterMap[letter] || [];
+            grid.innerHTML = '';
+
+            if (keys.length === 0) {
+                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;padding:20px;">موردی یافت نشد</p>';
+                return;
+            }
+
+            keys.forEach(key => {
+                const region = regionsData[key];
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.region = key;
+                card.innerHTML = `
+                    <div class="card-title">
+                        <div class="title-text">
+                            <span class="region-name">${region.name}</span>
+                            <span class="title-sub">پایگاه انتخاب رشته</span>
+                        </div>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-body-inner">برای اطلاعات بیشتر کلیک کنید</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // ---- مدیریت لمس/کشیدن روی نوار الفبا ----
+        function initAlphaBar() {
+            const bar = $('#alpha-bar');
+            const bubble = $('#alpha-bubble');
+            let activeLetter = null;
+            let isDragging = false;
+
+            function getLetterFromPoint(x, y) {
+                // پیدا کردن المان زیر انگشت
+                const el = document.elementFromPoint(x, y);
+                if (el && el.classList.contains('alpha-letter')) {
+                    return el.dataset.letter;
+                }
+                // اگر دقیقاً روی المان نبود، نزدیک‌ترین را پیدا کن
+                const letters = bar.querySelectorAll('.alpha-letter');
+                let closest = null;
+                let minDist = Infinity;
+                letters.forEach(l => {
+                    const r = l.getBoundingClientRect();
+                    const cx = r.left + r.width / 2;
+                    const cy = r.top + r.height / 2;
+                    const d = Math.hypot(x - cx, y - cy);
+                    if (d < minDist) { minDist = d; closest = l; }
+                });
+                if (closest && minDist < 40) return closest.dataset.letter;
+                return null;
+            }
+
+            function activateLetter(letter, x, y) {
+                if (!letter) return;
+                if (activeLetter === letter) {
+                    // فقط موقعیت حباب را آپدیت کن
+                    bubble.style.left = x + 'px';
+                    bubble.style.top = y + 'px';
+                    return;
+                }
+                activeLetter = letter;
+
+                // هایلایت حرف
+                bar.querySelectorAll('.alpha-letter').forEach(l => {
+                    l.classList.toggle('active', l.dataset.letter === letter);
+                });
+
+                // نمایش حباب
+                bubble.textContent = letter;
+                bubble.style.left = x + 'px';
+                bubble.style.top = y + 'px';
+                bubble.classList.add('show');
+
+                // فیلتر کارت‌ها
+                filterByLetter(letter);
+            }
+
+            function deactivate() {
+                activeLetter = null;
+                isDragging = false;
+                bar.querySelectorAll('.alpha-letter').forEach(l => l.classList.remove('active'));
+                bubble.classList.remove('show');
+            }
+
+            // شروع لمس
+            bar.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                isDragging = true;
+                bar.setPointerCapture(e.pointerId);
+                const letter = getLetterFromPoint(e.clientX, e.clientY);
+                if (letter) activateLetter(letter, e.clientX, e.clientY);
             });
 
-            // با خروج ماوس دوباره جمع شود
-            btn.addEventListener('mouseleave', () => {
-                btn.classList.add('collapsed');
+            // حرکت انگشت
+            bar.addEventListener('pointermove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const letter = getLetterFromPoint(e.clientX, e.clientY);
+                if (letter) activateLetter(letter, e.clientX, e.clientY);
+            });
+
+            // رها کردن انگشت
+            bar.addEventListener('pointerup', (e) => {
+                e.preventDefault();
+                // اگر کاربر فقط یک حرف را انتخاب کرده، فیلتر بماند
+                isDragging = false;
+                setTimeout(deactivate, 600);
+            });
+
+            bar.addEventListener('pointercancel', deactivate);
+            bar.addEventListener('pointerleave', (e) => {
+                if (isDragging) return;
+                // اگر ماوس از نوار بیرون رفت، حباب را ببند
             });
         }
 
@@ -625,6 +1010,8 @@
         window.addEventListener('DOMContentLoaded', () => {
             loadRegions();
             initShadFloat();
+            buildAlphaBar();
+            initAlphaBar();
         });
     </script>
 </body>

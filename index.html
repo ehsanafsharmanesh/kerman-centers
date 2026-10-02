@@ -92,7 +92,6 @@
             padding: 30px;
         }
 
-        /* ---- باکس بارگذاری کارنامه ---- */
         .upload-box {
             background: #fff8e1;
             border: 1px solid #ffe082;
@@ -128,6 +127,74 @@
             color: #856404;
             font-size: 0.8rem;
             margin-top: 10px;
+        }
+
+        /* ---- نشانگر فیلتر فعال ---- */
+        .filter-badge {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(78, 84, 200, 0.35);
+            animation: slideDown 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .filter-badge.show {
+            display: flex;
+        }
+
+        .filter-badge .filter-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-badge .filter-text .letter-chip {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 800;
+            min-width: 32px;
+            text-align: center;
+        }
+
+        .filter-badge .clear-filter {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .filter-badge .clear-filter:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: rotate(90deg);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* ---- گرید کارت‌ها ---- */
@@ -361,6 +428,53 @@
             box-shadow: 0 12px 30px rgba(0, 188, 212, 0.55);
         }
 
+        /* ---- دکمه شناور «نمایش همه» ---- */
+        .show-all-float {
+            display: none;
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 9999;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--accent), #ee5a5a);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.45);
+            font-weight: 700;
+            font-size: 0.9rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .show-all-float.show {
+            display: flex;
+        }
+
+        .show-all-float:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(255, 107, 107, 0.6);
+        }
+
+        .show-all-float i {
+            font-size: 1.1rem;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
         /* ---- نوار الفبای فارسی (فقط موبایل) ---- */
         .alpha-bar {
             display: none;
@@ -531,6 +645,22 @@
                 height: 65px;
                 font-size: 1.6rem;
             }
+
+            .show-all-float {
+                bottom: 80px;
+                right: 12px;
+                padding: 10px 16px;
+                font-size: 0.8rem;
+            }
+
+            .show-all-float i {
+                font-size: 1rem;
+            }
+
+            .filter-badge {
+                font-size: 0.8rem;
+                padding: 8px 12px;
+            }
         }
 
         @media (min-width: 769px) {
@@ -568,6 +698,18 @@
         <div class="main-content">
             <h2>مناطق استان کرمان</h2>
             <p>لطفاً منطقه مورد نظر خود را انتخاب کنید:</p>
+
+            <!-- نشانگر فیلتر فعال -->
+            <div class="filter-badge" id="filter-badge">
+                <div class="filter-text">
+                    <i class="fas fa-filter"></i>
+                    <span>فیلتر:</span>
+                    <span class="letter-chip" id="filter-letter">-</span>
+                </div>
+                <button class="clear-filter" id="clear-filter" title="لغو فیلتر">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
 
             <div class="grid-container" id="regions-grid"></div>
 
@@ -662,6 +804,11 @@
         <span class="shad-text">به گروه بزرگ ما در شاد بپیوندید</span>
     </a>
 
+    <button class="show-all-float" id="show-all-float">
+        <i class="fas fa-list"></i>
+        <span>نمایش همه شهرها</span>
+    </button>
+
     <div class="alpha-bar" id="alpha-bar"></div>
 
     <div class="alpha-bubble" id="alpha-bubble"></div>
@@ -715,6 +862,7 @@
         ];
 
         const $ = (sel) => document.querySelector(sel);
+        let currentActiveLetter = null;
 
         // ---- ساخت کارت‌های مناطق ----
         function loadRegions() {
@@ -742,12 +890,10 @@
             });
         }
 
-        // ---- باز/بسته کردن کارت ----
         function toggleCard(card) {
             card.classList.toggle('open');
         }
 
-        // ---- مدیریت رویدادها ----
         document.addEventListener('click', (e) => {
             const card = e.target.closest('.card[data-region]');
             if (card) {
@@ -895,6 +1041,14 @@
             const keys = letterMap[letter] || [];
             grid.innerHTML = '';
 
+            const badge = $('#filter-badge');
+            const showAllBtn = $('#show-all-float');
+            if (letter) {
+                $('#filter-letter').textContent = letter;
+                badge.classList.add('show');
+                showAllBtn.classList.add('show');
+            }
+
             if (keys.length === 0) {
                 grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;padding:20px;">موردی یافت نشد</p>';
                 return;
@@ -919,6 +1073,15 @@
                 `;
                 grid.appendChild(card);
             });
+        }
+
+        // ---- لغو فیلتر و نمایش همه ----
+        function clearFilter() {
+            $('#filter-badge').classList.remove('show');
+            $('#show-all-float').classList.remove('show');
+            currentActiveLetter = null;
+            loadRegions();
+            document.querySelectorAll('.alpha-letter.active').forEach(l => l.classList.remove('active'));
         }
 
         // ---- مدیریت لمس/کشیدن روی نوار الفبا (شبیه اندروید) ----
@@ -980,6 +1143,7 @@
 
                 if (activeLetter !== letter) {
                     activeLetter = letter;
+                    currentActiveLetter = letter;
 
                     bar.querySelectorAll('.alpha-letter').forEach(l => {
                         l.classList.toggle('active', l.dataset.letter === letter);
@@ -1065,6 +1229,9 @@
             initShadFloat();
             buildAlphaBar();
             initAlphaBar();
+
+            $('#clear-filter').addEventListener('click', clearFilter);
+            $('#show-all-float').addEventListener('click', clearFilter);
         });
     </script>
 </body>

@@ -92,18 +92,26 @@
             padding: 30px;
         }
 
+        /* ---- باکس بارگذاری کارنامه (کم‌ارتفاع) ---- */
         .upload-box {
             background: #fff8e1;
             border: 1px solid #ffe082;
-            border-radius: var(--radius);
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
+            border-radius: 10px;
+            padding: 8px 14px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         .upload-box h3 {
             color: #856404;
-            margin-bottom: 15px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin: 0;
+            white-space: nowrap;
         }
 
         .upload-box a {
@@ -111,22 +119,22 @@
             background: var(--success);
             color: #fff;
             text-decoration: none;
-            padding: 12px 28px;
+            padding: 6px 16px;
             border-radius: 50px;
             font-weight: 700;
+            font-size: 0.8rem;
             transition: var(--transition);
+            white-space: nowrap;
         }
 
         .upload-box a:hover {
             background: #218838;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
             box-shadow: var(--shadow-sm);
         }
 
         .upload-box p {
-            color: #856404;
-            font-size: 0.8rem;
-            margin-top: 10px;
+            display: none;
         }
 
         /* ---- نشانگر فیلتر فعال (با رنگ قرمز) ---- */
@@ -638,6 +646,23 @@
                 height: 30px;
                 font-size: 0.9rem;
             }
+
+            /* باکس بارگذاری کارنامه در موبایل */
+            .upload-box {
+                padding: 6px 10px;
+                margin: 8px 0;
+                gap: 8px;
+                border-radius: 8px;
+            }
+
+            .upload-box h3 {
+                font-size: 0.75rem;
+            }
+
+            .upload-box a {
+                padding: 5px 12px;
+                font-size: 0.75rem;
+            }
         }
 
         @media (min-width: 769px) {
@@ -664,12 +689,12 @@
             <span id="breadcrumb-text">لیست مناطق</span>
         </div>
 
+        <!-- باکس بارگذاری کارنامه (کم‌ارتفاع) -->
         <div class="upload-box">
-            <h3>بارگزاری اطلاعات کارنامه کنکور</h3>
+            <h3>بارگذاری کارنامه کنکور</h3>
             <a href="https://forms.gle/1ccWdQPo8Giu4cLr9" target="_blank" rel="noopener">
-                📤 بارگزاری کارنامه
+                📤 بارگذاری
             </a>
-            <p>برای بارگزاری کارنامه روی دکمه بالا کلیک کنید</p>
         </div>
 
         <div class="main-content">

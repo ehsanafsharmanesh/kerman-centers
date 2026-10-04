@@ -68,7 +68,7 @@
             margin: 0 auto;
         }
 
-        /* ---- نوار زیرنویس خبری ---- */
+        /* ---- نوار زیرنویس خبری (چپ به راست) ---- */
         .news-ticker {
             display: flex;
             align-items: center;
@@ -114,6 +114,7 @@
             height: 100%;
             display: flex;
             align-items: center;
+            direction: ltr;
         }
 
         .news-ticker .news-track {
@@ -122,7 +123,6 @@
             white-space: nowrap;
             will-change: transform;
             animation: news-scroll 30s linear infinite;
-            padding-left: 100%;
             direction: rtl;
         }
 
@@ -142,12 +142,16 @@
             font-size: 0.7rem;
         }
 
+        /* حرکت از چپ به راست با حلقه بی‌پایان */
         @keyframes news-scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
+            0% {
+                transform: translateX(-50%);
+            }
+            100% {
+                transform: translateX(0);
+            }
         }
 
-        /* دکمه بستن نوار خبر */
         .news-ticker .news-close {
             background: rgba(255, 255, 255, 0.15);
             border: none;
@@ -314,7 +318,7 @@
             }
         }
 
-        /* ---- نوار الفبای فارسی (افقی، بالای کارت‌ها) ---- */
+        /* ---- نوار الفبای فارسی (افقی، sticky) ---- */
         .alpha-bar {
             display: flex;
             position: sticky;
@@ -368,7 +372,7 @@
             box-shadow: 0 4px 12px rgba(78, 84, 200, 0.45);
         }
 
-        /* ---- حباب شناور (مثل اندروید) - بالای انگشت/موس ---- */
+        /* ---- حباب شناور ---- */
         .alpha-bubble {
             display: none;
             position: fixed;
@@ -893,7 +897,7 @@
 
     <div class="container">
         <header>
-            <h1>سامانه جامع پایگاه های انتخاب رشته آموزش و پرورش استان کرمان</h1>
+            <h1>سامانه جامع‌ پایگاه‌های انتخاب‌ رشته آموزش‌ و پرورش استان کرمان</h1>
             <p class="description">طراحی و توسعه: احسان افشارمنش (سرگروه آموزشی مشاوره استان)</p>
         </header>
 
@@ -1055,7 +1059,7 @@
             kerman:   { name: "کرمان", manager: "حسن فلاحی", phone: "09136394298", centerPhone: "03432226307", address: "کرمان خیابان معلم روبه روی اداره کل آموزش و پرورش", mapLink: "https://balad.ir/p/5IJyNAGT74ucds" },
             roadno:   { name: "راه نو کرمان", manager: "حسن فلاحی", phone: "09136394298", centerPhone: "03432226307", address: "کرمان خیابان معلم روبه روی اداره کل آموزش و پرورش مرکز مشاوره راه نو", mapLink: "https://balad.ir/p/5IJyNAGT74ucds" },
             area1:    { name: "ناحیه یک کرمان", manager: "محمدرضا غریب زاده", phone: "09990040387", centerPhone: "03432221735", address: "کرمان بلوار مصطفی خمینی (شهاب) نبش کوچه ۱۱", mapLink: "https://nshn.ir/_bPXKpOdbQUS" },
-            area2:    { name: "ناحیه دو کرمان", manager: "فرزاد میرشاهی", phone: "09136684737", centerPhone: "03432268635", address: "کرمان، خیابان مولوی، بعد از مولوی ۱۱، خیابان جامع، جنب دبیرستان پسرانه خاص فرهنگ آیت الله طالقانی، مرکز مشاوره مهر", mapLink: "https://nshn.ir/5e_bPo44QdYl1C" },
+            area2:    { name: "ناحیه دو کرمان", manager: "فرزاد میرشاهی", phone: "09136684737", centerPhone: "03432268635", address: "کرمان، خیابان مولوی، بعد از مولوی ۱۱، خیابان جامی، جنب دبیرستان پسرانه خاص فرهنگ آیت الله طالقانی، مرکز مشاوره مهر", mapLink: "https://nshn.ir/5e_bPo44QdYl1C" },
             zarand:   { name: "زرند", manager: "مصطفی عباس زاده", phone: "09132436221", centerPhone: "09132436221", address: "خیابان توکلی جنب آموزش و پرورش", mapLink: "https://nshn.ir/fc_bH5OEGjTqS0" },
             raien:    { name: "راین", manager: "محمدرضا میرزایی", phone: "09140986912", centerPhone: "09140986912", address: "اداره آموزش و پرورش منطقه راین، مرکز مشاوره فرزانگان درون محوطه اداره", mapLink: "https://nshn.ir/1c_bg-bwYdSYUi" },
             mahan:    { name: "ماهان", manager: "مینا شیخ علی بابایی", phone: "09133967637", centerPhone: "09133967637", address: "ماهان - بلوار مشکینی، مشکینی ۱۸، مرکز مشاوره اندیشه", mapLink: "https://neshan.org/maps/places/fbhTcg0dHH3o#c30.075-57.288-15z-0p" },
@@ -1220,13 +1224,12 @@
             $('#home-link').onclick = (e) => { e.preventDefault(); goBackToRegions(); };
         }
 
-        // ---- نوار زیرنویس خبری (با پشتیبانی از txt و json) ----
+        // ---- نوار زیرنویس خبری (چپ به راست با حلقه بی‌پایان) ----
         function initNewsTicker() {
             const ticker = document.getElementById('news-ticker');
             const track = document.getElementById('news-track');
             const closeBtn = document.getElementById('news-close');
 
-            // اگر قبلاً بسته شده بود، نمایش نده
             if (localStorage.getItem('news_closed') === 'true') {
                 ticker.style.display = 'none';
                 return;
@@ -1239,47 +1242,50 @@
                 }
 
                 track.innerHTML = '';
-                newsItems.forEach(news => {
-                    const item = document.createElement('span');
-                    item.className = 'news-item';
-                    item.textContent = news;
-                    track.appendChild(item);
-                });
+
+                // دو بار قرار دادن اخبار برای حلقه بی‌درز
+                for (let round = 0; round < 2; round++) {
+                    newsItems.forEach(news => {
+                        const item = document.createElement('span');
+                        item.className = 'news-item';
+                        item.textContent = news;
+                        track.appendChild(item);
+                    });
+                }
 
                 const totalLength = newsItems.join(' ').length;
-                const duration = Math.max(15, totalLength * 0.15);
+                const duration = Math.max(20, totalLength * 0.2);
                 track.style.animationDuration = duration + 's';
+                track.style.animationIterationCount = 'infinite';
+                track.style.animationTimingFunction = 'linear';
 
                 ticker.style.display = 'flex';
             }
 
-            // تلاش اول: news.txt
-            fetch('news.txt?t=' + Date.now())
+            // تلاش اول: news.json
+            fetch('news.json?t=' + Date.now())
                 .then(res => {
-                    if (!res.ok) throw new Error('news.txt not found');
-                    return res.text();
+                    if (!res.ok) throw new Error('news.json not found');
+                    return res.json();
                 })
-                .then(text => {
-                    const items = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                    renderNews(items);
-                })
+                .then(data => renderNews(data.news || []))
                 .catch(() => {
-                    // تلاش دوم: news.json
-                    fetch('news.json?t=' + Date.now())
+                    // تلاش دوم: news.txt
+                    fetch('news.txt?t=' + Date.now())
                         .then(res => {
-                            if (!res.ok) throw new Error('news.json not found');
-                            return res.json();
+                            if (!res.ok) throw new Error('news.txt not found');
+                            return res.text();
                         })
-                        .then(data => {
-                            renderNews(data.news || []);
+                        .then(text => {
+                            const items = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                            renderNews(items);
                         })
                         .catch(err => {
-                            console.warn('نوار خبر بارگذاری نشد. لطفاً فایل news.txt را در ریشه ریپازیتوری قرار دهید.', err.message);
+                            console.warn('نوار خبر بارگذاری نشد. لطفاً فایل news.json یا news.txt را در ریشه ریپازیتوری قرار دهید.', err.message);
                             ticker.style.display = 'none';
                         });
                 });
 
-            // دکمه بستن
             closeBtn.addEventListener('click', () => {
                 ticker.style.display = 'none';
                 localStorage.setItem('news_closed', 'true');
@@ -1469,7 +1475,6 @@
             function activateLetter(letter, x, y, showBubble) {
                 if (!letter) return;
 
-                // اگر قفل شده و حرف جدید است، فیلتر را عوض نکن
                 if (isLocked && activeLetter !== letter) return;
 
                 const bubbleOffsetX = 0;
@@ -1523,7 +1528,7 @@
                 }
             }
 
-            // ---- لمس (موبایل) ----
+            // لمس (موبایل)
             bar.addEventListener('pointerdown', (e) => {
                 lastPointerType = e.pointerType;
                 e.preventDefault();
@@ -1532,7 +1537,6 @@
 
                 const letter = getLetterFromPoint(e.clientX, e.clientY);
                 if (letter) {
-                    // اگر روی همان حرف قفل‌شده کلیک شد، قفل را باز کن
                     if (isLocked && activeLetter === letter) {
                         isLocked = false;
                         deactivate();
@@ -1550,7 +1554,7 @@
             bar.addEventListener('pointermove', (e) => {
                 lastPointerType = e.pointerType;
 
-                // در دسکتاپ: با حرکت موس روی نوار (بدون نیاز به کلیک)
+                // دسکتاپ: با حرکت موس روی نوار (بدون کلیک)
                 if (e.pointerType === 'mouse' && !isLocked) {
                     const letter = getLetterFromPoint(e.clientX, e.clientY);
                     if (letter) {
@@ -1572,7 +1576,6 @@
                 if (e.pointerType === 'mouse') return;
                 e.preventDefault();
                 isDragging = false;
-                // قفل کن تا فیلتر باقی بماند
                 if (activeLetter) {
                     isLocked = true;
                 }
@@ -1583,7 +1586,7 @@
                 isDragging = false;
             });
 
-            // ---- خروج موس از نوار ----
+            // خروج موس از نوار
             bar.addEventListener('mouseleave', () => {
                 if (isLocked) return;
                 activeLetter = null;
@@ -1595,20 +1598,18 @@
                 }
             });
 
-            // ---- کلیک روی حرف در دسکتاپ (قفل کردن) ----
+            // کلیک روی حرف در دسکتاپ (قفل کردن)
             bar.addEventListener('click', (e) => {
                 if (e.pointerType === 'touch') return;
                 const letterEl = e.target.closest('.alpha-letter');
                 if (!letterEl) return;
                 const letter = letterEl.dataset.letter;
                 if (isLocked && activeLetter === letter) {
-                    // باز کردن قفل
                     isLocked = false;
                     activeLetter = null;
                     bar.querySelectorAll('.alpha-letter').forEach(l => l.classList.remove('active'));
                     bubble.classList.remove('show');
                 } else {
-                    // قفل کردن
                     isLocked = true;
                     activateLetter(letter, e.clientX, e.clientY, true);
                 }
